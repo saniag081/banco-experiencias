@@ -4,6 +4,10 @@ import IconMen from './Icon/IconMen.vue'
 import { RouterLink } from 'vue-router'
 
 const props = defineProps({
+  primary: {
+    type: Boolean,
+    default: true,
+  },
   label: {
     type: String,
     default: 'label',
@@ -18,14 +22,15 @@ const props = defineProps({
   },
 })
 
-const { label } = toRefs(props)
+const { label, icon, href } = toRefs(props)
 </script>
 
 <template>
   <component
     :is="href ? RouterLink : 'button'"
     v-bind="$attrs"
-    class="btn-men primary"
+    class="btn-men"
+    :class="{ primary: primary, secundary: !primary }"
     :to="href"
     @click="
       (event) => {
@@ -53,6 +58,7 @@ const { label } = toRefs(props)
   line-height: 19px;
   text-align: center;
   text-decoration: none;
+  font-size: 16px;
   vertical-align: middle;
 
   border: 1px solid transparent;
@@ -63,6 +69,12 @@ const { label } = toRefs(props)
   &.primary {
     background: $color-primary;
     color: $color-white;
+  }
+
+  &.secundary {
+    background: transparent;
+    border: 1.5px solid $color-primary-50;
+    color: $color-primary-50;
   }
 }
 </style>

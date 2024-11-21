@@ -4,7 +4,7 @@ import { toRefs } from 'vue'
 const props = defineProps({
   label: {
     type: String,
-    default: 'label',
+    default: '',
   },
   placeholder: {
     type: String,
@@ -22,8 +22,8 @@ const { label, placeholder, mandatory } = toRefs(props)
 <template>
   <div class="men-input">
     <label class="d-flex flex-column">
-      <span v-if="mandatory">{{ label }} <i>*</i></span>
-      <span v-if="!mandatory">{{ label }}</span>
+      <span v-if="mandatory && label">{{ label }} <i>*</i></span>
+      <span v-if="!mandatory && label">{{ label }}</span>
       <textarea
         name=""
         id=""

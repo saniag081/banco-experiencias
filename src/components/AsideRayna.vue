@@ -28,6 +28,7 @@ const isHome = computed(() => route.name === 'home')
 
 .aside {
   min-height: 100vh;
+  height: 100%;
   background: $color-white;
   border-right: 1px solid $color-gray;
 

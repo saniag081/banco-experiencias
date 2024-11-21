@@ -1,39 +1,66 @@
 <script setup>
 import { ref, markRaw } from 'vue'
 import BreadcrumbMen from '@/components/common/BreadcrumbMen.vue'
-import InputText from '../components/common/InputText.vue'
-import InputNumber from '../components/common/InputNumber.vue'
-import InputTextarea from '../components/common/InputTextarea.vue'
+import OptionForm from '@/components/OptionForm.vue'
+import InputText from '@/components/common/InputText.vue'
+import InputNumber from '@/components/common/InputNumber.vue'
+import InputTextarea from '@/components/common/InputTextarea.vue'
 import ButtonMen from '@/components/common/ButtonMen.vue'
+import IconMen from '@/components/common/Icon/IconMen.vue'
+import QuestionItem from '@/components/QuestionItem.vue'
 
 const form = ref([])
-const dropzone = ref(null)
+let draggedItemIndex = null
 
-// Mapeo de componentes
+function getRandomNumbers() {
+  return Math.floor(Math.random() * 100)
+}
+
+const handlePushItem = (item) => {
+  const formItem = {
+    type: item,
+    id: `${item}${getRandomNumbers()}`,
+    mandatory: false,
+    label: '',
+    value: null,
+  }
+  form.value = [...form.value, formItem]
+}
+
 const componentMap = {
   InputText: markRaw(InputText),
   InputNumber: markRaw(InputNumber),
   InputTextarea: markRaw(InputTextarea),
 }
 
-// Evento dragstart: se activa al iniciar el arrastre
-const dragStart = (event) => {
-  event.dataTransfer.setData('text', event.target.id)
+const deleteItem = (id) => {
+  form.value = form.value.filter((item) => item.id != id)
 }
 
-// Evento dragover: permite que el dropzone reciba el elemento
-const dragover = (event) => {
-  event.preventDefault() // Permitir la acción de soltar
+const toggleMandatory = ({ id, mandatory }) => {
+  form.value = form.value.map((item) => {
+    if (item.id === id) {
+      item.mandatory = mandatory
+    }
+    return item
+  })
 }
 
-// Evento drop: se activa cuando el elemento se suelta en la zona
-const drop = (event) => {
-  event.preventDefault()
-  const data = event.dataTransfer.getData('text')
-  const draggableElement = document.getElementById(data)
-  // const clone = draggableElement?.cloneNode(true)
-  // dropzone.value.appendChild(clone)
-  form.value = [...form.value, componentMap[draggableElement.dataset.option]]
+const dragStart = (index) => {
+  draggedItemIndex = index
+}
+
+const dragEnter = (targetIndex) => {
+  if (draggedItemIndex === targetIndex) return
+
+  const item = form.value.splice(draggedItemIndex, 1)[0]
+  form.value.splice(targetIndex, 0, item)
+
+  draggedItemIndex = targetIndex
+}
+
+const dragEnd = () => {
+  draggedItemIndex = null
 }
 </script>
 
@@ -46,9 +73,10 @@ const drop = (event) => {
 
     <div class="row">
       <div class="col-12">
-        <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-between btns">
           <h5 class="title">Nuevo formulario</h5>
           <div>
+            <button-men label="Guardar" :primary="false" class="me-4" />
             <button-men label="Publicar" />
           </div>
         </div>
@@ -65,34 +93,63 @@ const drop = (event) => {
 
             <input-textarea label="Descripción" :mandatory="true" placeholder="Descripción" />
           </div>
+
+          <div
+            v-if="form.length > 0"
+            class="divider d-flex justify-content-center align-items-center"
+          >
+            <p class="mb-0">Preguntas</p>
+          </div>
+
+          <div>
+            <question-item
+              v-for="(item, index) in form"
+              :key="index"
+              :id="item.id"
+              :class="{ 'mb-3': form.length > 1 }"
+              draggable="true"
+              @delete-item="deleteItem"
+              @mandatory="toggleMandatory"
+              @dragstart="dragStart(index)"
+              @dragover.prevent
+              @dragenter="dragEnter(index)"
+              @dragend="dragEnd"
+            >
+              <component :is="componentMap[item.type]" />
+            </question-item>
+          </div>
+
+          <div class="divider d-flex justify-content-center align-items-center">
+            <icon-men name="plus_men" width="32" height="32" />
+          </div>
+
+          <div class="box d-flex justify-content-around">
+            <option-form
+              label="Texto largo"
+              icon="burger_men"
+              @click="() => handlePushItem('InputTextarea')"
+            />
+
+            <option-form
+              label="Texto corto"
+              icon="text_men"
+              @click="() => handlePushItem('InputText')"
+            />
+
+            <!-- <option-form
+              label="Selector maestro"
+              icon="checkbox_men"
+              @click="() => handlePushItem('InputTextarea')"
+            /> -->
+          </div>
+
+          <div class="divider d-flex justify-content-center align-items-center"></div>
+
+          <div class="box">
+            <button-men label="Enviar" />
+          </div>
         </div>
       </div>
-
-      <!-- <div class="col-12 col-md-8">
-        <p>Formulario</p>
-        <form ref="dropzone" class="p-3" @dragover="dragover" @drop="drop">
-          <div v-if="form.length < 1" class="dropzone p-4 m-3">
-            <p class="m-0">Dropzone</p>
-          </div>
-          <div v-for="(item, index) in form" :key="item + index">
-            <component :is="item" />
-          </div>
-        </form>
-      </div> -->
-      <!-- <div class="col-12 col-md-4">
-        <p>Componentes</p>
-        <ul>
-          <li id="draggable-1" @dragstart="dragStart" draggable="true" data-option="InputText">
-            Text field
-          </li>
-          <li id="draggable-2" @dragstart="dragStart" draggable="true" data-option="InputNumber">
-            Number
-          </li>
-          <li id="draggable-3" @dragstart="dragStart" draggable="true" data-option="InputTextarea">
-            Textarea
-          </li>
-        </ul>
-      </div> -->
     </div>
   </div>
 </template>
@@ -108,7 +165,34 @@ const drop = (event) => {
 
   .title {
     font-size: 32px;
-    margin-bottom: 38px;
+  }
+
+  .btns {
+    margin-bottom: 36px;
+    button {
+      min-width: 180px;
+    }
+  }
+
+  .divider {
+    padding: 16px 0px;
+    position: relative;
+
+    &::before {
+      content: '';
+      display: block;
+      color: $color-blue-10;
+      border: 1px solid $color-gray-40;
+      position: absolute;
+      left: 0px;
+      right: 0px;
+    }
+
+    p,
+    svg {
+      font-size: 18px;
+      z-index: 1;
+    }
   }
 
   .box {
@@ -122,10 +206,10 @@ const drop = (event) => {
       font-size: 24px;
       margin-bottom: 32px;
     }
+
+    button {
+      min-width: 230px;
+    }
   }
 }
-
-// .dropzone {
-//   border: 2px dashed #bbb;
-// }
 </style>

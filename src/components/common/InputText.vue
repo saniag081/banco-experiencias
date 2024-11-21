@@ -2,9 +2,13 @@
 import { toRefs } from 'vue'
 
 const props = defineProps({
+  primary: {
+    type: Boolean,
+    default: true,
+  },
   label: {
     type: String,
-    default: 'label',
+    default: '',
   },
   placeholder: {
     type: String,
@@ -22,9 +26,9 @@ const { label, placeholder, mandatory } = toRefs(props)
 <template>
   <div class="men-input">
     <label class="d-flex flex-column">
-      <span v-if="mandatory">{{ label }} <i>*</i></span>
-      <span v-if="!mandatory">{{ label }}</span>
-      <input type="text" :placeholder="placeholder" class="mt-2" />
+      <span v-if="mandatory && label">{{ label }} <i>*</i></span>
+      <span v-if="!mandatory && label">{{ label }}</span>
+      <input type="text" :placeholder="placeholder" class="mt-2" :class="{ secundary: !primary }" />
     </label>
   </div>
 </template>
@@ -48,6 +52,15 @@ const { label, placeholder, mandatory } = toRefs(props)
     color: $color-geray-30;
     background: $color-white;
     border-radius: 6px;
+  }
+
+  .secundary {
+    padding: 10px 12px;
+    color: $color-geray-30;
+    border: none;
+    border-bottom: 2px solid $color-red;
+    border-radius: 0px;
+    background-color: $color-gray-50;
   }
 }
 </style>
