@@ -7,6 +7,9 @@ export default {
   async putNewForm(payload) {
     return await ApiClient.post(`formulario`, payload)
   },
+  async putForm(id, payload) {
+    return await ApiClient.put(`formulario/${id}`, payload)
+  },
   async deleteForm(id, payload = {}) {
     return await ApiClient.delete(`formulario/${id}`, payload)
   },

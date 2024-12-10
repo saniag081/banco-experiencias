@@ -10,6 +10,7 @@ export const useFormsStore = defineStore('form', {
     isLoadingNewForm: false,
     responseDelete: {},
     responseDetail: {},
+    respondeUpdateForm: {},
   }),
   actions: {
     async getForms() {
@@ -25,6 +26,9 @@ export const useFormsStore = defineStore('form', {
     async getDetilForm(id) {
       const { data } = await ApiRepository.getDetilForm(id)
       this.responseDetail = data
+    },
+    async updateForm(id, payload) {
+      this.updateForm = ApiRepository.putForm(id, payload)
     },
   },
 })
