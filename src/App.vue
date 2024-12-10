@@ -1,13 +1,6 @@
-<script setup>
-// import { RouterLink, RouterView } from 'vue-router'
-import LayoutPrivate from './components/layoutPrivite.vue'
-</script>
-
 <template>
   <main class="">
-    <layout-private>
-      <RouterView />
-    </layout-private>
+    <router-view />
   </main>
 </template>
 

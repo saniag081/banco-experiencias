@@ -128,7 +128,12 @@ const dragEnd = () => {
         <div class="d-flex justify-content-between btns">
           <h5 class="title">Nuevo formulario</h5>
           <div>
-            <button-men label="Guardar" :primary="false" class="me-4" />
+            <button-men
+              label="Guardar"
+              :primary="false"
+              class="me-4"
+              @click="requestNewForm"
+              :loading="storeForm.isLoadingNewForm" />
             <button-men label="Publicar" />
           </div>
         </div>
@@ -204,13 +209,13 @@ const dragEnd = () => {
 
           <div class="divider d-flex justify-content-center align-items-center"></div>
 
-          <div class="box">
+          <!-- <div class="box">
             <button-men
               label="Enviar"
               @click="requestNewForm"
               :loading="storeForm.isLoadingNewForm"
             />
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

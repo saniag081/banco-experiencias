@@ -13,7 +13,7 @@ export default {
   async deleteForm(id, payload = {}) {
     return await ApiClient.delete(`formulario/${id}`, payload)
   },
-  async getDetilForm(id) {
+  async getFormDetail(id) {
     return await ApiClient.get(`formulario/${id}`)
   },
 }

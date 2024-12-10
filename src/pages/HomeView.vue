@@ -95,7 +95,7 @@ const handleDeleteForm = async () => {
         <p>Consulta y crea nuevos formularios</p>
       </div>
       <div class="col-12 col-sm-6 text-end mb-4">
-        <button-men label="Nuevo formulario" icon="add_men" href="/formulario" />
+        <button-men label="Nuevo formulario" icon="add_men" href="/form/new" />
       </div>
       <div class="col-12 mt-2">
         <div class="box">
@@ -143,23 +143,27 @@ const handleDeleteForm = async () => {
                   </a>
 
                   <ul class="dropdown-menu" aria-labelledby="dropdownOptions">
-                    <li><a class="dropdown-item" href="#">Editar</a></li>
+                    <li v-if="props.row.estado.toLocaleLowerCase() === 'borrador'">
+                      <router-link class="dropdown-item" :to="`form/${props.row.id}/edit`">Editar</router-link>
+                    </li>
                     <li>
                       <a
                         class="dropdown-item"
                         data-bs-toggle="modal"
                         data-bs-target="#comfirn-delete"
-                        @click="lastItemSelected = props.row.id"
-                        >Eliminar</a
-                      >
+                        @click="lastItemSelected = props.row.id">
+                        Eliminar
+                      </a>
                     </li>
                     <li>
-                      <router-link class="dropdown-item" :to="`formulario/${props.row.id}`"
-                        >Ver</router-link
-                      >
+                      <router-link class="dropdown-item" :to="`form/${props.row.id}`">Ver</router-link>
                     </li>
-                    <li><hr class="dropdown-divider" /></li>
-                    <li><a class="dropdown-item" href="#">Enlace público</a></li>
+                    <li v-if="props.row.estado.toLocaleLowerCase() === 'activo'"><hr class="dropdown-divider" /></li>
+                    <li v-if="props.row.estado.toLocaleLowerCase() === 'activo'">
+                      <router-link class="dropdown-item" :to="`form/${props.row.id}/fill`">
+                        Enlace público
+                      </router-link>
+                    </li>
                   </ul>
                 </div>
               </div>

@@ -21,7 +21,7 @@ const descriptionForm = ref('')
 
 const requestDetailForm = async () => {
   try {
-    await storeForm.getDetilForm(route.params.id)
+    await storeForm.getFormDetail(route.params.id)
     form.value = storeForm.responseDetail.esquema.fields
     nameForm.value = storeForm.responseDetail.esquema.name
     descriptionForm.value = storeForm.responseDetail.esquema.description
@@ -40,7 +40,7 @@ const getCurrentDate = () => {
   return `${year}-${month}-${day}`
 }
 
-const requestNewForm = async () => {
+const requestEditForm = async () => {
   try {
     storeForm.isLoadingNewForm = true
     await storeForm.updateForm(route.params.id, {
@@ -221,7 +221,7 @@ const dragEnd = () => {
           <div class="box">
             <button-men
               label="Enviar"
-              @click="requestNewForm"
+              @click="requestEditForm"
               :loading="storeForm.isLoadingNewForm"
             />
           </div>

@@ -23,8 +23,8 @@ export const useFormsStore = defineStore('form', {
     async deleteForm(id, payload) {
       this.responseDelete = await ApiRepository.deleteForm(id, payload)
     },
-    async getDetilForm(id) {
-      const { data } = await ApiRepository.getDetilForm(id)
+    async getFormDetail(id) {
+      const { data } = await ApiRepository.getFormDetail(id)
       this.responseDetail = data
     },
     async updateForm(id, payload) {

@@ -10,7 +10,7 @@ import AsideRayna from './AsideRayna.vue'
     </div>
     <div>
       <header-rayna />
-      <slot></slot>
+      <router-view />
     </div>
   </div>
 </template>

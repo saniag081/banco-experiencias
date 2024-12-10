@@ -16,21 +16,21 @@
             "mandatory": true,
             "label": "Nombre del formulario",
             "placeholder": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-            "value": null
+            "value": "Respuesta 1"
           },
           {
             "type": "InputTextarea",
             "mandatory": true,
             "label": "Nombre del formulario",
             "placeholder": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-            "value": null
+            "value": "Respuesta 2"
           },
           {
             "type": "select",
             "mandatory": true,
             "label": "Nombre del formulario",
             "placeholder": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-            "value": null,
+            "value": "Respuesta 3",
             "maestroId": ""
           }
         ]
@@ -53,7 +53,7 @@
             "mandatory": true,
             "label": "nombre",
             "placeholder": "ingrese su nombre",
-            "value": null
+            "value": "Daniel"
           },
           {
             "type": "InputText",
@@ -61,7 +61,7 @@
             "mandatory": true,
             "label": "apellido",
             "placeholder": "ingrese su apellido",
-            "value": null
+            "value": "Hernandez Sotelo"
           },
           {
             "type": "InputTextarea",
@@ -69,44 +69,36 @@
             "mandatory": false,
             "label": "direccion",
             "placeholder": "ingrese su direccion",
-            "value": null
+            "value": "1905/220 Spencer St"
           }
         ]
       }
     },
     {
-      "id": "5733dfdd-b350-4f04-abd0-05ad622205ac",
-      "fechaCreacion": "2024-12-09",
+      "id": "9cee8995-1efa-4f2b-81e4-f603211924da",
+      "fechaCreacion": "2024-12-10",
       "estado": "BORRADOR",
       "tipo": "string",
       "usuario": "string",
       "esquema": {
-        "name": "demo",
-        "description": "descriptions",
+        "name": "Formulario 5",
+        "description": "Descripcion formulario 5",
         "projectId": "",
         "fields": [
           {
-            "type": "InputText",
-            "id": "InputText54",
-            "mandatory": true,
-            "label": "pregunta",
-            "placeholder": "prueba placeholder",
-            "value": null
-          },
-          {
-            "type": "InputText",
-            "id": "InputText50",
-            "mandatory": false,
-            "label": "nombre",
-            "placeholder": "ingrese nombre",
-            "value": null
-          },
-          {
             "type": "InputTextarea",
-            "id": "InputTextarea31",
+            "id": "InputTextarea41",
             "mandatory": false,
-            "label": "direccion",
-            "placeholder": "ingrese direccion",
+            "label": "Pregunta 1",
+            "placeholder": "",
+            "value": null
+          },
+          {
+            "type": "InputText",
+            "id": "InputText29",
+            "mandatory": false,
+            "label": "Pregunta 2",
+            "placeholder": "",
             "value": null
           }
         ]
