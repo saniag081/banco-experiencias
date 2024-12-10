@@ -2,6 +2,10 @@
 import { toRefs } from 'vue'
 
 const props = defineProps({
+  modelValue: {
+    type: String,
+    default: '',
+  },
   label: {
     type: String,
     default: '',
@@ -17,6 +21,8 @@ const props = defineProps({
 })
 
 const { label, placeholder, mandatory } = toRefs(props)
+
+const emit = defineEmits(['update:modelValue'])
 </script>
 
 <template>
@@ -25,12 +31,10 @@ const { label, placeholder, mandatory } = toRefs(props)
       <span v-if="mandatory && label">{{ label }} <i>*</i></span>
       <span v-if="!mandatory && label">{{ label }}</span>
       <textarea
-        name=""
-        id=""
-        cols="10"
-        rows="4"
         :placeholder="placeholder"
         class="mt-2"
+        :value="modelValue"
+        @input="(event) => emit('update:modelValue', event.target.value)"
         v-bind="$attrs"
       ></textarea>
     </label>

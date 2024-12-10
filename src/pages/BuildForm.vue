@@ -8,8 +8,50 @@ import InputTextarea from '@/components/common/InputTextarea.vue'
 import ButtonMen from '@/components/common/ButtonMen.vue'
 import IconMen from '@/components/common/Icon/IconMen.vue'
 import QuestionItem from '@/components/QuestionItem.vue'
+import { v4 as uuidv4 } from 'uuid'
+import { useRouter } from 'vue-router'
+
+import { useFormsStore } from '@/stores/forms'
+const router = useRouter()
+
+const getCurrentDate = () => {
+  const today = new Date()
+  const year = today.getFullYear()
+  const month = String(today.getMonth() + 1).padStart(2, '0')
+  const day = String(today.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
 
 const form = ref([])
+const nameForm = ref('')
+const descriptionForm = ref('')
+
+const storeForm = useFormsStore()
+
+const requestNewForm = async () => {
+  try {
+    storeForm.isLoadingNewForm = true
+    await storeForm.putNewForm({
+      id: uuidv4(),
+      fechaCreacion: getCurrentDate(),
+      estado: 'BORRADOR',
+      tipo: 'string',
+      usuario: 'string',
+      esquema: {
+        name: nameForm.value,
+        description: descriptionForm.value,
+        projectId: '',
+        fields: form.value,
+      },
+    })
+  } catch (error) {
+    console.error(error)
+  } finally {
+    storeForm.isLoadingNewForm = false
+    router.push('/')
+  }
+}
+
 let draggedItemIndex = null
 
 function getRandomNumbers() {
@@ -22,6 +64,7 @@ const handlePushItem = (item) => {
     id: `${item}${getRandomNumbers()}`,
     mandatory: false,
     label: '',
+    placeholder: '',
     value: null,
   }
   form.value = [...form.value, formItem]
@@ -41,6 +84,15 @@ const toggleMandatory = ({ id, mandatory }) => {
   form.value = form.value.map((item) => {
     if (item.id === id) {
       item.mandatory = mandatory
+    }
+    return item
+  })
+}
+
+const setLabel = ({ id, label }) => {
+  form.value = form.value.map((item) => {
+    if (item.id === id) {
+      item.label = label
     }
     return item
   })
@@ -85,13 +137,19 @@ const dragEnd = () => {
           <div class="box">
             <h5>Configuración básica del formulario</h5>
             <input-text
+              v-model="nameForm"
               label="Nombre del formulario"
               placeholder="Nombre"
               :mandatory="true"
               class="mb-4"
             />
 
-            <input-textarea label="Descripción" :mandatory="true" placeholder="Descripción" />
+            <input-textarea
+              v-model="descriptionForm"
+              label="Descripción"
+              :mandatory="true"
+              placeholder="Descripción"
+            />
           </div>
 
           <div
@@ -104,18 +162,19 @@ const dragEnd = () => {
           <div>
             <question-item
               v-for="(item, index) in form"
-              :key="index"
+              :key="item.id"
               :id="item.id"
               :class="{ 'mb-3': form.length > 1 }"
               draggable="true"
               @delete-item="deleteItem"
               @mandatory="toggleMandatory"
+              @label="setLabel"
               @dragstart="dragStart(index)"
               @dragover.prevent
               @dragenter="dragEnter(index)"
               @dragend="dragEnd"
             >
-              <component :is="componentMap[item.type]" />
+              <component :is="componentMap[item.type]" v-model="item.placeholder" />
             </question-item>
           </div>
 
@@ -146,7 +205,11 @@ const dragEnd = () => {
           <div class="divider d-flex justify-content-center align-items-center"></div>
 
           <div class="box">
-            <button-men label="Enviar" />
+            <button-men
+              label="Enviar"
+              @click="requestNewForm"
+              :loading="storeForm.isLoadingNewForm"
+            />
           </div>
         </div>
       </div>

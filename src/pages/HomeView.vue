@@ -2,75 +2,94 @@
 import ButtonMen from '../components/common/ButtonMen.vue'
 import 'vue-good-table-next/dist/vue-good-table-next.css'
 import { VueGoodTable } from 'vue-good-table-next'
+import IconMen from '@/components/common/Icon/IconMen.vue'
+import { ref } from 'vue'
+import { RouterLink } from 'vue-router'
+
+import { useFormsStore } from '@/stores/forms'
+
+const formsStore = useFormsStore()
+const { getForms, deleteForm } = formsStore
+
+const lastItemSelected = ref('')
+
+const requestForms = async () => {
+  try {
+    await getForms()
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+requestForms()
 
 const columns = [
   {
     label: 'Nombre del formulario',
-    field: 'name',
-  },
-  {
-    label: 'Número de preguntas',
-    field: 'age',
+    field: 'esquema.name',
   },
   {
     label: 'Fecha de creación',
-    field: 'createdAt',
+    field: 'fechaCreacion',
   },
   {
     label: 'Estado',
-    field: 'state',
+    field: 'estado',
   },
 ]
 
-const rows = [
-  {
-    id: 1,
-    name: 'Shalom Winner - Solar Sales Receipt Installation',
-    age: 20,
-    createdAt: null,
-    state: 'Publicado',
-  },
-  {
-    id: 2,
-    name: 'Shalom Winner - Solar Sales Receipt Installation',
-    age: 24,
-    createdAt: '2011-10-31',
-    state: 'Publicado',
-  },
-  {
-    id: 3,
-    name: 'Shalom Winner - Solar Sales Receipt Installation',
-    age: 16,
-    createdAt: '2011-10-30',
-    state: 'Borrador',
-  },
-  {
-    id: 4,
-    name: 'Shalom Winner - Solar Sales Receipt Installation',
-    age: 55,
-    createdAt: '2011-10-11',
-    state: 'Publicado',
-  },
-  {
-    id: 5,
-    name: 'Shalom Winner - Solar Sales Receipt Installationn',
-    age: 40,
-    createdAt: '2011-10-21',
-    state: 'Publicado',
-  },
-  {
-    id: 6,
-    name: 'Shalom Winner - Solar Sales Receipt Installation',
-    age: 20,
-    createdAt: '2011-10-31',
-    state: 'Publicado',
-  },
-]
+const getLabelState = (label) => {
+  if (label.toLocaleLowerCase() === 'activo') {
+    return 'Publicado'
+  }
+
+  return 'Borrador'
+}
+
+const handleDeleteForm = async () => {
+  try {
+    await deleteForm(lastItemSelected.value)
+    await requestForms()
+
+    const modalElement = document.getElementById('comfirn-delete')
+    const modalInstance = window.bootstrap.Modal.getInstance(modalElement)
+    modalInstance.hide()
+  } catch (error) {
+    console.error(error)
+  } finally {
+    console.log(lastItemSelected)
+  }
+}
 </script>
 
 <template>
   <div class="content">
     <div class="row">
+      <div class="col-12">
+        <div
+          class="modal fade"
+          id="comfirn-delete"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content p-3">
+              <div class="modal-body">
+                <div class="text-center">
+                  <h5 class="mb-4" id="exampleModalLabel">Eliminar formulario</h5>
+                  <p class="mb-0">Eliminaras un formulario ¿Seguro que deseas eliminarlo?</p>
+                </div>
+              </div>
+              <div class="d-flex justify-content-center p-3 gap-3">
+                <button-men label="Cancelar" data-bs-dismiss="modal" :primary="false" />
+                <button-men label="Sí, eliminar" @click="handleDeleteForm" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="col-12 col-sm-6">
         <h5>Formularios</h5>
         <p>Consulta y crea nuevos formularios</p>
@@ -83,7 +102,7 @@ const rows = [
           <p class="mb-0 p-3 total">Formularios: 927</p>
           <vue-good-table
             :columns="columns"
-            :rows="rows"
+            :rows="formsStore.forms"
             :sort-options="{
               enabled: false,
             }"
@@ -100,15 +119,50 @@ const rows = [
             }"
           >
             <template #table-row="props">
-              <span v-if="props.column.field == 'state'">
+              <div
+                v-if="props.column.field == 'estado'"
+                class="d-flex justify-content-between align-items-center"
+              >
                 <span
                   :class="{
-                    green: props.row.state === 'Publicado',
-                    gray: props.row.state === 'Borrador',
+                    green: props.row.estado.toLocaleLowerCase() === 'activo',
+                    gray: props.row.estado.toLocaleLowerCase() === 'borrador',
                   }"
-                  >{{ props.row.state }}</span
+                  >{{ getLabelState(props.row.estado) }}</span
                 >
-              </span>
+                <div class="dropdown">
+                  <a
+                    class="btn-icon d-flex align-items-center justify-content-center"
+                    href="#"
+                    role="button"
+                    id="dropdownOptions"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    <icon-men name="dots_men" width="16" height="16" />
+                  </a>
+
+                  <ul class="dropdown-menu" aria-labelledby="dropdownOptions">
+                    <li><a class="dropdown-item" href="#">Editar</a></li>
+                    <li>
+                      <a
+                        class="dropdown-item"
+                        data-bs-toggle="modal"
+                        data-bs-target="#comfirn-delete"
+                        @click="lastItemSelected = props.row.id"
+                        >Eliminar</a
+                      >
+                    </li>
+                    <li>
+                      <router-link class="dropdown-item" :to="`formulario/${props.row.id}`"
+                        >Ver</router-link
+                      >
+                    </li>
+                    <li><hr class="dropdown-divider" /></li>
+                    <li><a class="dropdown-item" href="#">Enlace público</a></li>
+                  </ul>
+                </div>
+              </div>
             </template>
           </vue-good-table>
         </div>
@@ -125,6 +179,24 @@ const rows = [
 
   background-color: $color-gray-10;
   min-height: calc(100vh - 65px);
+
+  .btn-icon {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #e4e7ec;
+    border-radius: 8px;
+    color: $color-black;
+  }
+
+  .dropdown-menu {
+    width: 267px;
+    border: none;
+    box-shadow: 0px 4px 20px 0px #0000001a;
+
+    a {
+      padding: 8px 16px;
+    }
+  }
 
   .green {
     padding: 2px 12px;
@@ -156,6 +228,9 @@ const rows = [
   }
 
   .vgt-wrap {
+    .vgt-responsive {
+      overflow: initial;
+    }
     .vgt-table.bordered td,
     .vgt-table.bordered th {
       border: none;

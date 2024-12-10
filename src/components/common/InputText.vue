@@ -2,6 +2,10 @@
 import { toRefs } from 'vue'
 
 const props = defineProps({
+  modelValue: {
+    type: String,
+    default: '',
+  },
   primary: {
     type: Boolean,
     default: true,
@@ -20,7 +24,9 @@ const props = defineProps({
   },
 })
 
-const { label, placeholder, mandatory } = toRefs(props)
+const { label, placeholder, mandatory, primary } = toRefs(props)
+
+const emit = defineEmits(['update:modelValue'])
 </script>
 
 <template>
@@ -28,7 +34,14 @@ const { label, placeholder, mandatory } = toRefs(props)
     <label class="d-flex flex-column">
       <span v-if="mandatory && label">{{ label }} <i>*</i></span>
       <span v-if="!mandatory && label">{{ label }}</span>
-      <input type="text" :placeholder="placeholder" class="mt-2" :class="{ secundary: !primary }" />
+      <input
+        type="text"
+        :placeholder="placeholder"
+        :value="modelValue"
+        class="mt-2"
+        :class="{ secundary: !primary }"
+        @input="(input) => emit('update:modelValue', input.target.value)"
+      />
     </label>
   </div>
 </template>

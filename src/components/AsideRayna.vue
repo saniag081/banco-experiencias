@@ -10,7 +10,7 @@ const isHome = computed(() => route.name === 'home')
 <template>
   <aside class="aside pt-4 px-2">
     <figure class="px-3 aside-logo">
-      <icon-men name="rayna_men" width="224" height="40" />
+      <img src="@/assets/logo.png" alt="Logo" />
     </figure>
     <ul class="aside-options p-0 m-0">
       <li>

@@ -1,10 +1,11 @@
 <script setup>
-import { toRef, toRefs, defineEmits, watch } from 'vue'
+import { toRef, toRefs, defineEmits, watch, ref } from 'vue'
 import IconMen from './common/Icon/IconMen.vue'
 import InputText from './common/InputText.vue'
 import SwitchMen from './SwitchMen.vue'
 
 const mandatory = toRef(false)
+const label = ref('')
 
 const props = defineProps({
   id: {
@@ -15,10 +16,14 @@ const props = defineProps({
 
 const { id } = toRefs(props)
 
-const emit = defineEmits(['delete-item', 'mandatory'])
+const emit = defineEmits(['delete-item', 'mandatory', 'label'])
 
 watch(mandatory, (newValue) => {
   emit('mandatory', { id: id.value, mandatory: newValue })
+})
+
+watch(label, (newValue) => {
+  emit('label', { id: id.value, label: newValue })
 })
 </script>
 
@@ -32,7 +37,7 @@ watch(mandatory, (newValue) => {
           <switch-men v-model="mandatory" />
         </div>
         <div>
-          <input-text class="w-100" :primary="false" />
+          <input-text class="w-100" :primary="false" v-model="label" />
           <slot></slot>
         </div>
       </div>

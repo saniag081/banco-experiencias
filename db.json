@@ -1,0 +1,116 @@
+{
+  "formulario": [
+    {
+      "id": "5abdd90a-4d1e-061c-718f-1e4f63c93d6h",
+      "fechaCreacion": "2024-10-01",
+      "estado": "ACTIVO",
+      "tipo": "string",
+      "usuario": "string",
+      "esquema": {
+        "name": "Shalom Winner - Solar Sales Receipt Installation",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae vulputate elit. Nullam ex dui, vehicula viverra arcu in, facilisis sodales massa. Ut ullamcorper iaculis justo at ullamcorper. Morbi bibendum, odio suscipit fermentum tempor, enim justo auctor lacus, id volutpat mi neque sed elit. Integer pulvinar luctus elementum. Etiam volutpat aliquet massa sed feugiat. Ut ac risus erat. Phasellus at risus leo. Ut iaculis nibh auctor velit suscipit posuere. Sed sit amet felis erat.",
+        "projectId": "",
+        "fields": [
+          {
+            "type": "InputText",
+            "mandatory": true,
+            "label": "Nombre del formulario",
+            "placeholder": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+            "value": null
+          },
+          {
+            "type": "InputTextarea",
+            "mandatory": true,
+            "label": "Nombre del formulario",
+            "placeholder": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+            "value": null
+          },
+          {
+            "type": "select",
+            "mandatory": true,
+            "label": "Nombre del formulario",
+            "placeholder": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+            "value": null,
+            "maestroId": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "404c3858-d64c-45b2-ac60-bdb060620fce",
+      "fechaCreacion": "2024-12-09",
+      "estado": "BORRADOR",
+      "tipo": "string",
+      "usuario": "string",
+      "esquema": {
+        "name": "preuba de fomrulario",
+        "description": "sadsadsadd",
+        "projectId": "",
+        "fields": [
+          {
+            "type": "InputText",
+            "id": "InputText67",
+            "mandatory": true,
+            "label": "nombre",
+            "placeholder": "ingrese su nombre",
+            "value": null
+          },
+          {
+            "type": "InputText",
+            "id": "InputText37",
+            "mandatory": true,
+            "label": "apellido",
+            "placeholder": "ingrese su apellido",
+            "value": null
+          },
+          {
+            "type": "InputTextarea",
+            "id": "InputTextarea43",
+            "mandatory": false,
+            "label": "direccion",
+            "placeholder": "ingrese su direccion",
+            "value": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "5733dfdd-b350-4f04-abd0-05ad622205ac",
+      "fechaCreacion": "2024-12-09",
+      "estado": "BORRADOR",
+      "tipo": "string",
+      "usuario": "string",
+      "esquema": {
+        "name": "demo",
+        "description": "descriptions",
+        "projectId": "",
+        "fields": [
+          {
+            "type": "InputText",
+            "id": "InputText54",
+            "mandatory": true,
+            "label": "pregunta",
+            "placeholder": "prueba placeholder",
+            "value": null
+          },
+          {
+            "type": "InputText",
+            "id": "InputText50",
+            "mandatory": false,
+            "label": "nombre",
+            "placeholder": "ingrese nombre",
+            "value": null
+          },
+          {
+            "type": "InputTextarea",
+            "id": "InputTextarea31",
+            "mandatory": false,
+            "label": "direccion",
+            "placeholder": "ingrese direccion",
+            "value": null
+          }
+        ]
+      }
+    }
+  ]
+}

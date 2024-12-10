@@ -20,6 +20,10 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  loading: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const { label, icon, href } = toRefs(props)
@@ -31,16 +35,12 @@ const { label, icon, href } = toRefs(props)
     v-bind="$attrs"
     class="btn-men"
     :class="{ primary: primary, secundary: !primary }"
+    :disabled="loading"
     :to="href"
-    @click="
-      (event) => {
-        $emit('click')
-        event.target.focus()
-      }
-    "
   >
     <icon-men v-if="icon" :name="icon" class="me-2" />
     {{ label }}
+    <icon-men v-if="loading" name="loading_men" class="spin" />
   </component>
 </template>
 
@@ -75,6 +75,29 @@ const { label, icon, href } = toRefs(props)
     background: transparent;
     border: 1.5px solid $color-primary-50;
     color: $color-primary-50;
+  }
+
+  /*****************
+  * Spin animation *
+  *****************/
+  & .spin {
+    width: 24px;
+    height: 24px;
+
+    animation-name: rotate;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes rotate {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
   }
 }
 </style>
