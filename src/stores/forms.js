@@ -28,7 +28,7 @@ export const useFormsStore = defineStore('form', {
       this.responseDetail = data
     },
     async updateForm(id, payload) {
-      this.updateForm = ApiRepository.putForm(id, payload)
+      this.respondeUpdateForm = await ApiRepository.putForm(id, payload)
     },
   },
 })

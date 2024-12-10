@@ -12,9 +12,20 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  defaultValue: {
+    type: String,
+    default: '',
+  },
+  defaultMandatory: {
+    type: Boolean,
+    default: false,
+  },
 })
 
-const { id } = toRefs(props)
+const { id, defaultValue, defaultMandatory } = toRefs(props)
+
+label.value = defaultValue.value
+mandatory.value = defaultMandatory.value
 
 const emit = defineEmits(['delete-item', 'mandatory', 'label'])
 
